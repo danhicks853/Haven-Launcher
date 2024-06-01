@@ -25,10 +25,9 @@ Haven Launcher is a comprehensive World of Warcraft (WoW) launcher designed to s
 
 ## Usage
 1. Launch the Haven Launcher application.
-2. Add your WoW expansion clients by navigating to **File > Add Expansion**.
-3. Follow the prompts to download and configure the clients.
-4. Manage and install Addons through the **Addons** tab.
-5. Select the desired expansion client and click the **Launch** button to start the game.
+2. Click "Install" to download and unpack the selected client.
+4. Manage and install Addons by selecting an addon in the list and clicking Install Addon.
+5. Select the desired expansion client and click the **Play EXPANSION!** button to start the game.
 
 ## Project Structure
 - `Haven-Launcher.sln`: Solution file for Visual Studio.
