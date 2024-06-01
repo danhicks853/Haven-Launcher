@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Haven-Launcher", "Haven-Launcher\Haven-Launcher.csproj", "{1A5C6D30-0E04-4989-AF9A-3F0507C57FEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A5C6D30-0E04-4989-AF9A-3F0507C57FEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A5C6D30-0E04-4989-AF9A-3F0507C57FEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A5C6D30-0E04-4989-AF9A-3F0507C57FEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A5C6D30-0E04-4989-AF9A-3F0507C57FEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4B3655BC-BA13-400D-86E9-71C337B7DDF3}
+	EndGlobalSection
+EndGlobal
