@@ -473,7 +473,7 @@ namespace Haven_Launcher
             this.BackgroundImage = Properties.Resources.cata;
             this.BackgroundImageLayout = ImageLayout.Stretch;
             btnPlay.Text = "Play Cataclysm!";
-            CLIENTDIRECTORY = "";
+            CLIENTDIRECTORY = "https://legionhaven.com/cata/minimalclient.zip";
             REG_KEY = "cataDirectory";
             WEBVIEW_SOURCE = "http://legionhaven.com/cata/changelog.html";
             MINIMAL_CLIENT_URI = "http://legionhaven.com/cata/minimalclient.zip";
