@@ -360,8 +360,8 @@ namespace Haven_Launcher
 
         private void btnModifySettings_Click(object sender, EventArgs e)
         {
-            bool clientExists = CheckClientDirectory();
-            if (clientExists)
+            
+            if (CheckClientDirectory())
             {
                 DialogResult confirm = MessageBox.Show("You are about to move your World of Warcraft Installation. Continue?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (confirm == DialogResult.Yes)
@@ -385,6 +385,22 @@ namespace Haven_Launcher
                 {
                     MessageBox.Show("No Changes have been made.");
                 }
+            } else
+            {
+                SaveDirectoryToRegistry();
+                string registryKeyName = "ClientDirectory";
+                using (RegistryKey keynew = Registry.CurrentUser.OpenSubKey(@"Software\Haven"))
+                {
+                    CLIENTDIRECTORY = keynew.GetValue(registryKeyName).ToString();
+                }
+                if (CheckClientDirectory())
+                {
+                    SetupControlsClientPresent();
+                } else
+                {
+                    SetupControlsNoClient();
+                }
+                MessageBox.Show("Client Directory Changed");
             }
         }
 
