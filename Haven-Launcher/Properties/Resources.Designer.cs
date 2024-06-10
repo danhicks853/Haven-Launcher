@@ -63,39 +63,9 @@ namespace Haven_Launcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap cata {
-            get {
-                object obj = ResourceManager.GetObject("cata", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap legion {
             get {
                 object obj = ResourceManager.GetObject("legion", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap tbc {
-            get {
-                object obj = ResourceManager.GetObject("tbc", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap vanilla {
-            get {
-                object obj = ResourceManager.GetObject("vanilla", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

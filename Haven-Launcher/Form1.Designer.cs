@@ -40,10 +40,7 @@ namespace Haven_Launcher
             btnCancel = new Button();
             btnModifySettings = new Button();
             webView21 = new WebView2();
-            btnVanilla = new Button();
-            btnTbc = new Button();
             btnWotlk = new Button();
-            btnCata = new Button();
             btnLegion = new Button();
             ((ISupportInitialize)webView21).BeginInit();
             SuspendLayout();
@@ -54,7 +51,7 @@ namespace Haven_Launcher
             lbxAddons.ForeColor = SystemColors.ActiveCaptionText;
             lbxAddons.FormattingEnabled = true;
             lbxAddons.ItemHeight = 15;
-            lbxAddons.Location = new Point(38, 106);
+            lbxAddons.Location = new Point(39, 44);
             lbxAddons.Name = "lbxAddons";
             lbxAddons.Size = new Size(204, 229);
             lbxAddons.TabIndex = 1;
@@ -64,11 +61,11 @@ namespace Haven_Launcher
             btnInstallAddon.BackColor = Color.Transparent;
             btnInstallAddon.BackgroundImageLayout = ImageLayout.None;
             btnInstallAddon.ForeColor = SystemColors.ActiveCaptionText;
-            btnInstallAddon.Location = new Point(38, 341);
+            btnInstallAddon.Location = new Point(38, 279);
             btnInstallAddon.Name = "btnInstallAddon";
             btnInstallAddon.Size = new Size(204, 26);
             btnInstallAddon.TabIndex = 2;
-            btnInstallAddon.Text = "Install Selected Addons";
+            btnInstallAddon.Text = "Install Selected Addon";
             btnInstallAddon.UseVisualStyleBackColor = false;
             btnInstallAddon.Click += btnInstallAddon_Click;
             // 
@@ -149,58 +146,28 @@ namespace Haven_Launcher
             webView21.CreationProperties = null;
             webView21.DefaultBackgroundColor = Color.White;
             webView21.ForeColor = Color.LimeGreen;
-            webView21.Location = new Point(257, 106);
+            webView21.Location = new Point(257, 12);
             webView21.Name = "webView21";
-            webView21.Size = new Size(751, 504);
+            webView21.Size = new Size(751, 598);
             webView21.Source = new Uri("http://legionhaven.com/changelog.html", UriKind.Absolute);
             webView21.TabIndex = 0;
             webView21.ZoomFactor = 1D;
             // 
-            // btnVanilla
-            // 
-            btnVanilla.Location = new Point(407, 11);
-            btnVanilla.Name = "btnVanilla";
-            btnVanilla.Size = new Size(101, 56);
-            btnVanilla.TabIndex = 11;
-            btnVanilla.Text = "Vanilla";
-            btnVanilla.UseVisualStyleBackColor = true;
-            btnVanilla.Click += btnVanilla_Click;
-            // 
-            // btnTbc
-            // 
-            btnTbc.Location = new Point(514, 12);
-            btnTbc.Name = "btnTbc";
-            btnTbc.Size = new Size(101, 56);
-            btnTbc.TabIndex = 12;
-            btnTbc.Text = "TBC";
-            btnTbc.UseVisualStyleBackColor = true;
-            btnTbc.Click += btnTbc_Click;
-            // 
             // btnWotlk
             // 
-            btnWotlk.Location = new Point(621, 12);
+            btnWotlk.Location = new Point(141, 12);
             btnWotlk.Name = "btnWotlk";
-            btnWotlk.Size = new Size(101, 56);
+            btnWotlk.Size = new Size(101, 26);
             btnWotlk.TabIndex = 13;
             btnWotlk.Text = "WotLK";
             btnWotlk.UseVisualStyleBackColor = true;
             btnWotlk.Click += btnWotlk_Click;
             // 
-            // btnCata
-            // 
-            btnCata.Location = new Point(728, 12);
-            btnCata.Name = "btnCata";
-            btnCata.Size = new Size(101, 56);
-            btnCata.TabIndex = 14;
-            btnCata.Text = "Cata";
-            btnCata.UseVisualStyleBackColor = true;
-            btnCata.Click += btnCata_Click;
-            // 
             // btnLegion
             // 
-            btnLegion.Location = new Point(253, 12);
+            btnLegion.Location = new Point(39, 12);
             btnLegion.Name = "btnLegion";
-            btnLegion.Size = new Size(101, 56);
+            btnLegion.Size = new Size(101, 26);
             btnLegion.TabIndex = 16;
             btnLegion.Text = "Legion";
             btnLegion.UseVisualStyleBackColor = true;
@@ -213,10 +180,7 @@ namespace Haven_Launcher
             BackColor = SystemColors.AppWorkspace;
             ClientSize = new Size(1020, 622);
             Controls.Add(btnLegion);
-            Controls.Add(btnCata);
             Controls.Add(btnWotlk);
-            Controls.Add(btnTbc);
-            Controls.Add(btnVanilla);
             Controls.Add(webView21);
             Controls.Add(btnModifySettings);
             Controls.Add(lbxAddons);
@@ -245,10 +209,7 @@ namespace Haven_Launcher
         private Button btnCancel;
         private Button btnModifySettings;
         private WebView2 webView21;
-        private Button btnVanilla;
-        private Button btnTbc;
         private Button btnWotlk;
-        private Button btnCata;
         private Button btnLegion;
     }
 }

@@ -17,6 +17,7 @@ namespace Haven_Launcher
 {
     public partial class HavenLauncher : Form
     {
+        static string GAME = "legion";
         static string CLIENTDIRECTORY = "";
         static string REG_PATH = "Software\\Haven";
         static string REG_KEY = "";
@@ -27,6 +28,7 @@ namespace Haven_Launcher
         static string CONNECT_CONFIG = "";
         static string CONNECT_CONFIG_LINE = "";
         static string SERVER_IP = "129.159.85.2";
+        static string GET_PATCH = "false";
         public HavenLauncher()
         {
             InitializeComponent();
@@ -36,6 +38,7 @@ namespace Haven_Launcher
         {
             this.BackgroundImage = Properties.Resources.legion;
             this.BackgroundImageLayout = ImageLayout.Stretch;
+            GAME = "legion";
             btnPlay.Text = "Play Legion!";
             CLIENTDIRECTORY = "";
             REG_KEY = "LegionDirectory";
@@ -47,8 +50,7 @@ namespace Haven_Launcher
             CONNECT_CONFIG = "legionhack";
             CONNECT_CONFIG_LINE = $"SET portal \"{SERVER_IP}\"";
         }
-        private async void InitializeExpansion() 
-        { 
+        private async void InitializeExpansion() { 
             await webView21.EnsureCoreWebView2Async(null);
             webView21.CoreWebView2.Navigate($"{ WEBVIEW_SOURCE}");
             using (HttpClient client = new HttpClient())
@@ -201,10 +203,27 @@ namespace Haven_Launcher
         }
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            modifyConfig($"{CLIENTDIRECTORY}\\{CONNECT_CONFIG}", CONNECT_CONFIG_LINE);
+            if (GAME == "wrath")
+            {
+                modifyConfig($"{CLIENTDIRECTORY}\\data\\enUS\\realmlist.wtf", $"set realmlist {SERVER_IP}");
+            } else
+            {
+                modifyConfig($"{CLIENTDIRECTORY}\\wtf\\HG-735.wtf", $"SET portal {SERVER_IP}");
+                modifyConfig($"{CLIENTDIRECTORY}\\wtf\\config.wtf", $"SET portal {SERVER_IP}");
+            }
+            
             bool fileExists = System.IO.File.Exists($"{CLIENTDIRECTORY}\\wow.exe");
             if (fileExists)
             {
+                if(GET_PATCH == "true")
+                {
+                    if (System.IO.File.Exists($"{CLIENTDIRECTORY}\\data\\Patch-A.mpq"))
+                    {} else
+                    {
+                        new System.Net.WebClient().DownloadFile("https://legionhaven.com/wotlk/Patch-A.MPQ", $"{CLIENTDIRECTORY}\\data\\Patch-A.mpq");
+
+                    }
+                }
                 Process.Start($"{CLIENTDIRECTORY}\\wow.exe");
             } else
             {
@@ -403,9 +422,9 @@ namespace Haven_Launcher
                 MessageBox.Show("Client Directory Changed");
             }
         }
-
         private void btnLegion_Click(object sender, EventArgs e)
         {
+            GAME = "legion";
             this.BackgroundImage = Properties.Resources.legion;
             this.BackgroundImageLayout = ImageLayout.Stretch;
             btnPlay.Text = "Play Legion!";
@@ -416,73 +435,22 @@ namespace Haven_Launcher
             CLIENT_URI = "http://legionhaven.com/client.zip";
             ADDON_URI = "http://legionhaven.com/addons/";
             InitializeExpansion();
-            CONNECT_CONFIG = "legionhack";
-            CONNECT_CONFIG_LINE = $"SET portal \"{SERVER_IP}\"";
         }
-
-        private void btnVanilla_Click(object sender, EventArgs e)
-        {
-            this.BackgroundImage = Properties.Resources.vanilla;
-            this.BackgroundImageLayout = ImageLayout.Stretch;
-            btnPlay.Text = "Play Vanilla!";
-            CLIENTDIRECTORY = "";
-            REG_KEY = "VanillaDirectory";
-            WEBVIEW_SOURCE = "http://legionhaven.com/vanilla/changelog.html";
-            MINIMAL_CLIENT_URI = "";
-            CLIENT_URI = "http://legionhaven.com/vanilla/client.zip";
-            ADDON_URI = "http://legionhaven.com/vanilla/addons/";
-            InitializeExpansion();
-            CONNECT_CONFIG = $"{CLIENTDIRECTORY}\\WTF\\config.wtf";
-            CONNECT_CONFIG_LINE = $"SET portal \"{SERVER_IP}\"";
-        }
-
-        private void btnTbc_Click(object sender, EventArgs e)
-        {
-            this.BackgroundImage = Properties.Resources.tbc;
-            this.BackgroundImageLayout = ImageLayout.Stretch;
-            btnPlay.Text = "Play Burning Crusade!!";
-            CLIENTDIRECTORY = "";
-            REG_KEY = "TbcDirectory";
-            WEBVIEW_SOURCE = "http://legionhaven.com/tbc/changelog.html";
-            MINIMAL_CLIENT_URI = "";
-            CLIENT_URI = "http://legionhaven.com/tbc/client.zip";
-            ADDON_URI = "http://legionhaven.com/tbc/addons/";
-            InitializeExpansion();
-            CONNECT_CONFIG = $"{CLIENTDIRECTORY}\\WTF\\config.wtf";
-            CONNECT_CONFIG_LINE = $"SET portal \"{SERVER_IP}\"";
-        }
-
         private void btnWotlk_Click(object sender, EventArgs e)
         {
+            GAME = "wrath";
             this.BackgroundImage = Properties.Resources.wrath;
             this.BackgroundImageLayout = ImageLayout.Stretch;
             btnPlay.Text = "Play Wrath of the Lich King!";
+            btnInstall.Text = "Install Wrath!";
             CLIENTDIRECTORY = "";
             REG_KEY = "WotlkDirectory";
             WEBVIEW_SOURCE = "http://legionhaven.com/wotlk/changelog.html";
-            MINIMAL_CLIENT_URI = "";
+            MINIMAL_CLIENT_URI = null;
             CLIENT_URI = "http://legionhaven.com/wotlk/client.zip";
             ADDON_URI = "http://legionhaven.com/wotlk/addons/";
             InitializeExpansion();
-            CONNECT_CONFIG = $"{CLIENTDIRECTORY}\\WTF\\config.wtf";
-            CONNECT_CONFIG_LINE = $"SET portal \"{SERVER_IP}\"";
+            GET_PATCH = "true";
         }
-
-        private void btnCata_Click(object sender, EventArgs e)
-        {
-            this.BackgroundImage = Properties.Resources.cata;
-            this.BackgroundImageLayout = ImageLayout.Stretch;
-            btnPlay.Text = "Play Cataclysm!";
-            CLIENTDIRECTORY = "https://legionhaven.com/cata/minimalclient.zip";
-            REG_KEY = "cataDirectory";
-            WEBVIEW_SOURCE = "http://legionhaven.com/cata/changelog.html";
-            MINIMAL_CLIENT_URI = "http://legionhaven.com/cata/minimalclient.zip";
-            CLIENT_URI = "http://legionhaven.com/cata/client.zip";
-            ADDON_URI = "http://legionhaven.com/cata/addons/";
-            InitializeExpansion();
-            CONNECT_CONFIG = $"{CLIENTDIRECTORY}\\WTF\\config.wtf";
-            CONNECT_CONFIG_LINE = $"SET portal \"{SERVER_IP}\"";
-        }
-
     }
 }

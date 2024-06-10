@@ -13,10 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="resources\cata.jpg" />
     <None Remove="resources\legion.jpg" />
-    <None Remove="resources\tbc.jpg" />
-    <None Remove="resources\vanilla.jpg" />
     <None Remove="resources\wrath.jpg" />
   </ItemGroup>
 
@@ -25,10 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="resources\cata.jpg" />
     <EmbeddedResource Include="resources\legion.jpg" />
-    <EmbeddedResource Include="resources\tbc.jpg" />
-    <EmbeddedResource Include="resources\vanilla.jpg" />
     <EmbeddedResource Include="resources\wrath.jpg" />
   </ItemGroup>
 
