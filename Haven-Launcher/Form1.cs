@@ -275,79 +275,113 @@ namespace Haven_Launcher
         public class DownloadClient
         {
             private bool isCanceled;
+            private const int MaxRetries = 3;
+            private const int DelayMilliseconds = 5000;
+
             public async Task<bool> DownloadClientAsync(string url, string destinationPath, Label lblProgress, ProgressBar progressBar, Button btnCancel, string extractpath)
             {
                 isCanceled = false;
-                using (HttpClient httpClient = new HttpClient())
+                btnCancel.Click += (s, e) => isCanceled = true;
+
+                int attempts = 0;
+                while (attempts < MaxRetries)
                 {
-                    long totalBytes = -1;
-                    long existingBytes = 0;
-                    FileInfo fileInfo = new FileInfo(destinationPath);
-                    if (fileInfo.Exists)
+                    try
                     {
-                        existingBytes = fileInfo.Length;
-                    }
-                    var request = new HttpRequestMessage(HttpMethod.Get, url);
-                    if (existingBytes > 0)
-                    {
-                        request.Headers.Range = new System.Net.Http.Headers.RangeHeaderValue(existingBytes, null);
-                    }
-                    using (HttpResponseMessage response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead))
-                    {
-                        response.EnsureSuccessStatusCode();
-                        totalBytes = response.Content.Headers.ContentLength ?? -1L;
-                        totalBytes += existingBytes;
-                        long totalRead = existingBytes;
-                        byte[] buffer = new byte[8192];
-                        var downloadTask = response.Content.ReadAsStreamAsync();
-                        btnCancel.Click += (s, e) => isCanceled = true;
-                        using (var fileStream = new FileStream(destinationPath, FileMode.Append, FileAccess.Write, FileShare.None, buffer.Length, true))
+                        using (HttpClient httpClient = new HttpClient())
                         {
-                            var stream = await downloadTask;
-                            int bytesRead;
-                            DateTime lastUpdate = DateTime.Now;
-                            while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                            long totalBytes = -1;
+                            long existingBytes = 0;
+                            FileInfo fileInfo = new FileInfo(destinationPath);
+                            if (fileInfo.Exists)
                             {
-                                if (isCanceled)
+                                existingBytes = fileInfo.Length;
+                            }
+
+                            var request = new HttpRequestMessage(HttpMethod.Get, url);
+                            if (existingBytes > 0)
+                            {
+                                request.Headers.Range = new System.Net.Http.Headers.RangeHeaderValue(existingBytes, null);
+                            }
+
+                            using (HttpResponseMessage response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead))
+                            {
+                                response.EnsureSuccessStatusCode();
+                                totalBytes = response.Content.Headers.ContentLength ?? -1L;
+                                totalBytes += existingBytes;
+                                long totalRead = existingBytes;
+                                byte[] buffer = new byte[8192];
+                                var downloadTask = response.Content.ReadAsStreamAsync();
+
+                                using (var fileStream = new FileStream(destinationPath, FileMode.Append, FileAccess.Write, FileShare.None, buffer.Length, true))
                                 {
-                                    return false;
-                                }
-                                await fileStream.WriteAsync(buffer, 0, bytesRead);
-                                totalRead += bytesRead;
-                                if (DateTime.Now - lastUpdate >= TimeSpan.FromSeconds(1))
-                                {
-                                    int progressPercentage = (int)((totalRead * 100) / totalBytes);
-                                    lblProgress.Invoke(new Action(() => lblProgress.Text = $"{progressPercentage}% {(int)(totalRead / 1000000)} MB /{(int)(totalBytes / 1000000)} MB"));
-                                    progressBar.Invoke(new Action(() => progressBar.Value = progressPercentage));
-                                    lastUpdate = DateTime.Now;
+                                    var stream = await downloadTask;
+                                    int bytesRead;
+                                    DateTime lastUpdate = DateTime.Now;
+
+                                    while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                                    {
+                                        if (isCanceled)
+                                        {
+                                            return false;
+                                        }
+
+                                        await fileStream.WriteAsync(buffer, 0, bytesRead);
+                                        totalRead += bytesRead;
+
+                                        if (DateTime.Now - lastUpdate >= TimeSpan.FromSeconds(1))
+                                        {
+                                            int progressPercentage = (int)((totalRead * 100) / totalBytes);
+                                            lblProgress.Invoke(new Action(() => lblProgress.Text = $"{progressPercentage}% {(int)(totalRead / 1000000)} MB /{(int)(totalBytes / 1000000)} MB"));
+                                            progressBar.Invoke(new Action(() => progressBar.Value = progressPercentage));
+                                            lastUpdate = DateTime.Now;
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
-                }
-                Directory.CreateDirectory(extractpath);
-                string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-                Directory.CreateDirectory(tempPath);
-                try
-                {
-                    ZipFile.ExtractToDirectory(destinationPath, tempPath);
 
-                    foreach (var tempFile in Directory.GetFiles(tempPath, "*", SearchOption.AllDirectories))
+                        Directory.CreateDirectory(extractpath);
+                        string tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+                        Directory.CreateDirectory(tempPath);
+
+                        try
+                        {
+                            ZipFile.ExtractToDirectory(destinationPath, tempPath);
+
+                            foreach (var tempFile in Directory.GetFiles(tempPath, "*", SearchOption.AllDirectories))
+                            {
+                                string relativePath = tempFile.Substring(tempPath.Length + 1);
+                                string destinationFile = Path.Combine(extractpath, relativePath);
+                                Directory.CreateDirectory(Path.GetDirectoryName(destinationFile));
+                                System.IO.File.Copy(tempFile, destinationFile, true);
+                            }
+                        }
+                        finally
+                        {
+                            Directory.Delete(tempPath, true);
+                        }
+
+                        System.IO.File.Delete(destinationPath);
+                        return true;
+                    }
+                    catch (Exception)
                     {
-                        string relativePath = tempFile.Substring(tempPath.Length + 1);
-                        string destinationFile = Path.Combine(extractpath, relativePath);
-                        Directory.CreateDirectory(Path.GetDirectoryName(destinationFile));
-                        System.IO.File.Copy(tempFile, destinationFile, true);
+                        attempts++;
+                        if (attempts >= MaxRetries)
+                        {
+                            lblProgress.Invoke(new Action(() => lblProgress.Text = "Download failed after multiple attempts."));
+                            return false;
+                        }
+
+                        await Task.Delay(DelayMilliseconds);
                     }
                 }
-                finally
-                {
-                    Directory.Delete(tempPath, true);
-                }
-                System.IO.File.Delete(destinationPath);
-                return true;
+
+                return false;
             }
         }
+
         private async void GetAddon()
         {
             Process[] processes = Process.GetProcessesByName("wow.exe");
